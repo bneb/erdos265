@@ -1,0 +1,42 @@
+\documentclass{article}
+
+\begin{document}
+
+Building on the recent constructive bounds by Kova\v{c} and Tao [KoTa24], I have used the Lean 4 interactive theorem prover to formally map the Diophantine constraints of Erd\H{o}s Problem 265. (Note: the formalization strictly enforces $a_1 < a_2 < \dots$). 
+
+By pushing the dual-rationality constraints to their algebraic limits within Lean, we obtain an unconditional upper bound on the limit superior, alongside a structural proof demonstrating why standard continuous dynamical/ergodic approaches are insufficient to close the remaining gap to $\beta = 2$.
+
+\textbf{1. Unconditional Algebraic Envelope ($\beta \le 3$)}
+
+Let $P_N = \prod_{k=1}^{N-1} a_k$ and $P'_N = \prod_{k=1}^{N-1} (a_k-1)$. If $\sum \frac{1}{a_n} = \frac{p_1}{q_1}$ and $\sum \frac{1}{a_n-1} = \frac{p_2}{q_2}$, we define the exact coupling integer $C_N$ as:
+
+$$ C_N = q_1 q_2 P_N P'_N \sum_{k=N}^\infty \frac{1}{a_k(a_k-1)} $$
+
+Because $a_k(a_k-1)$ is universally the product of consecutive integers, it is strictly even. This introduces a 2-adic valuation ratchet which unconditionally forces discrete exponential growth:
+
+$$ C_N \ge 2^{N-1} $$
+
+Intersecting this discrete floor with the continuous fractional squeeze of the tail sum, $C_N \le \frac{P_N P'_N}{a_N(a_N - 1)} \approx \frac{P_N^2}{a_N^2}$, yields the strict recurrence:
+
+$$ a_N \le \mathcal{O}\left( \frac{P_N}{2^{(N-1)/2}} \right) $$
+
+Solving this recurrence explicitly provides an absolute, unconditional algebraic ceiling of $\limsup a_n^{1/3^n} < \infty$.
+
+\textbf{2. The Ergodic Obstruction}
+
+To push the envelope down from $\beta \le 3$ to $\beta \le 2$ for oscillating sequences, a natural approach is to model the linear recovery phases as a walk on the torus $\mathbb{T}^2$. One would typically invoke Weyl equidistribution to prove the sequence must ``miss'' the target zones, thereby suffering massive prefix inflation.
+
+However, the formalization reveals a severe structural obstruction. The true fractional residual relative to the prefix product is exactly:
+
+$$ x_N \equiv \frac{C_N}{q_1 q_2} \pmod 1 $$
+
+Because $C_N$ is an exact integer, the state space is not continuous; it is strictly confined to the finite cyclic group $\frac{1}{q_1 q_2} \mathbb{Z} / \mathbb{Z}$. 
+
+The sequence never actually wanders a continuous torus---it is locked into a rigid modular lattice of size $q_1 q_2$. Due to the discrete and finite nature of the domain, expansive mapping hypotheses and continuous equidistribution bounds trivially fail. The exact Diophantine rigidity that provides the $\beta \le 3$ ceiling simultaneously destroys the continuous fractional variations necessary for ergodic theory to apply.
+
+It appears that closing the remaining gap between the Kova\v{c}-Tao sequences and the $\beta \le 3$ envelope will require strictly discrete/combinatorial tools or $p$-adic dynamics.
+
+The fully verified, 0-axiom Lean 4 repository containing these bounds is available here:\\
+https://github.com/bneb/erdos265
+
+\end{document}

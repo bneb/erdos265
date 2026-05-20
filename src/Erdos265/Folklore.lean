@@ -88,7 +88,7 @@ lemma single_residual_int (N : ℕ)
   rw [hZ]
   use P * p - q * Z
   push_cast
-  ring_nf
+  ring
 
 /-- The residual is a strictly positive integer. -/
 lemma single_residual_ge_one (N : ℕ) 
@@ -185,3 +185,60 @@ lemma folklore_ceiling (N : ℕ)
   
   rw [h_simplify, mul_one] at h_mul_a
   exact h_mul_a
+lemma seq_bound_of_square_bound_real (y : ℕ → ℝ) (h_pos : ∀ n, y n ≥ 0) (h_step : ∀ n, y (n + 1) ≤ y n ^ 2) (n : ℕ) :
+    y n ≤ y 0 ^ (2 ^ n) := by
+  induction n with
+  | zero =>
+    simp
+  | succ n ih =>
+    have h1 : y (n + 1) ≤ y n ^ 2 := h_step n
+    have h2 : y n ^ 2 ≤ (y 0 ^ (2 ^ n)) ^ 2 := by
+      have h_nonneg : 0 ≤ y n := h_pos n
+      nlinarith
+    have h3 : (y 0 ^ (2 ^ n)) ^ 2 = y 0 ^ (2 ^ (n + 1)) := by
+      have : (2 ^ n : ℕ) * 2 = 2 ^ (n + 1) := by ring
+      calc (y 0 ^ (2 ^ n)) ^ 2 = y 0 ^ ((2 ^ n : ℕ) * 2) := by rw [← pow_mul]
+        _ = y 0 ^ (2 ^ (n + 1) : ℕ) := by rw [this]
+    rw [h3] at h2
+    exact le_trans h1 h2
+
+lemma P1_step_real (N : ℕ) : (P1 a (N + 1) : ℝ) = (P1 a N : ℝ) * (a N : ℝ) := by
+  dsimp [P1]
+  rw [prod_range_succ]
+  push_cast
+  rfl
+
+lemma folklore_asymptotic_bound 
+    (hq : q > 0)
+    (hGe2 : ∀ k, a k ≥ 2)
+    (h_ceiling : ∀ N, (a N : ℝ) ≤ 2 * (q : ℝ) * (P1 a N : ℝ)) (N : ℕ) :
+    (a N : ℝ) ≤ (2 * (q : ℝ) * (P1 a 0 : ℝ)) ^ (2 ^ N) := by
+  let y := fun n => 2 * (q : ℝ) * (P1 a n : ℝ)
+  have h_pos : ∀ n, y n ≥ 0 := by
+    intro n
+    dsimp [y]
+    have hq_pos : (q : ℝ) > 0 := by exact_mod_cast hq
+    have h_prod_z : (∏ k ∈ Finset.range n, (a k : ℤ)) > 0 := by
+      apply Finset.prod_pos
+      intro i _
+      have : a i ≥ 2 := hGe2 i
+      omega
+    have hP_pos : (P1 a n : ℝ) > 0 := by 
+      dsimp [P1]
+      exact_mod_cast h_prod_z
+    positivity
+  have h_step : ∀ n, y (n + 1) ≤ y n ^ 2 := by
+    intro n
+    dsimp [y]
+    have h1 : (P1 a (n + 1) : ℝ) = (P1 a n : ℝ) * (a n : ℝ) := P1_step_real a n
+    rw [h1]
+    have h2 : 2 * (q : ℝ) * ((P1 a n : ℝ) * (a n : ℝ)) = (2 * (q : ℝ) * (P1 a n : ℝ)) * (a n : ℝ) := by ring
+    rw [h2]
+    have h3 : (2 * (q : ℝ) * (P1 a n : ℝ)) * (a n : ℝ) ≤ (2 * (q : ℝ) * (P1 a n : ℝ)) * (2 * (q : ℝ) * (P1 a n : ℝ)) := by
+      exact mul_le_mul_of_nonneg_left (h_ceiling n) (h_pos n)
+    have h4 : (2 * (q : ℝ) * (P1 a n : ℝ)) * (2 * (q : ℝ) * (P1 a n : ℝ)) = (2 * (q : ℝ) * (P1 a n : ℝ)) ^ 2 := by ring
+    rw [h4] at h3
+    exact h3
+  have h_bound := seq_bound_of_square_bound_real y h_pos h_step N
+  have h_a_le : (a N : ℝ) ≤ y N := h_ceiling N
+  exact le_trans h_a_le h_bound
