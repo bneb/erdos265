@@ -9,3 +9,4 @@ import Erdos265.TorusDynamics
 import Erdos265.WeylCriterion
 import Erdos265.WeylCriterion
 import Erdos265.Folklore
+import Erdos265.CombinatorialAnalysis
