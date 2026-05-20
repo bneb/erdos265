@@ -10,3 +10,5 @@ import Erdos265.WeylCriterion
 import Erdos265.WeylCriterion
 import Erdos265.Folklore
 import Erdos265.CombinatorialAnalysis
+import Erdos265.CombinatorialGraph
+import Erdos265.InterleavingSequence
