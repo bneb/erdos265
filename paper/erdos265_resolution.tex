@@ -1,0 +1,38 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm, hyperref}
+
+\title{Formal Verification Framework for Erd\H{o}s Problem 265}
+\author{Lean 4 Formalization Project}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We present a formal verification framework in Lean 4 for the analysis of Erd\H{o}s Problem 265. This problem investigates the growth rate of integer sequences $a_n$ for which both $\sum 1/a_n$ and $\sum 1/(a_n - 1)$ are rational. We provide formal proofs for the single-sum growth limit and the rational lattice gap. Furthermore, we establish a structural roadmap for establishing the $\beta \le 2$ growth ceiling, framing it as a Diophantine obstruction arising from the lattice resolution of the residuals.
+\end{abstract}
+
+\section{Introduction}
+Erd\H{o}s Problem 265 concerns the tension between the additive structure of reciprocals and the multiplicative growth of sequence terms. The problem asks for the supremum of the double-exponential base $\beta$ for sequences satisfying the dual-rationality constraint. This project establishes a formal roadmap for mapping the boundaries of this growth using the Lean 4 interactive theorem prover.
+
+\section{Verified Results}
+The following properties have been established with zero axioms and zero \textit{sorry} statements:
+\begin{enumerate}
+    \item \textbf{The Folklore Theorem:} For sequences with a uniform growth limit, the double-exponential base is strictly bounded by 2.
+    \item \textbf{The Lattice Gap:} For any rational target $p/q$, the tail sum residual is restricted to a discrete lattice with minimum spacing $1/(q P_N)$, where $P_N$ is the prefix product.
+    \item \textbf{Admissibility Stability:} We define a region in the residual state space and prove it is invariant under the sequence dynamics for sufficiently large integer terms.
+\end{enumerate}
+
+\section{The Resolution Frontier}
+While the framework provides a rigorous foundation, the absolute resolution of the problem depends on establishing the link between discrete residuals and continuous growth rates. We formalize these dependencies as structured hypotheses:
+\begin{enumerate}
+    \item \textbf{The $\beta \le 3$ Bound:} Proved conditional on the ``Analytic Squeeze'' link between tail sums and prefix products.
+    \item \textbf{The $\beta \le 2$ Barrier:} Established as a structural hypothesis, where growth exceeding base-2 triggers a prefix-inflation penalty that contradicts the trajectory.
+\end{enumerate}
+
+\section{Conclusion}
+This repository provides a machine-verified technical map of Erd\H{o}s Problem 265, identifying the exact algebraic and Diophantine limits where sequence growth is constrained by the rigidity of the integers.
+
+\end{document}
