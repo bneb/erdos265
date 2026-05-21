@@ -11,3 +11,4 @@ import Erdos265.WeylCriterion
 import Erdos265.Folklore
 import Erdos265.LatticeScale
 import Erdos265.ExistenceStability
+import Erdos265.DualGreedy
