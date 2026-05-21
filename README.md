@@ -12,9 +12,9 @@ The following components are fully formalized and verified within the Lean 4 ker
 - **File:** `src/Erdos265/Folklore.lean`
 - **Verification:** Proves that for sequences with a uniform growth limit, the growth is strictly bounded by $\mathcal{O}(C^{2^N})$.
 
-### Rational Lattice Spacing
-- **File:** `src/Erdos265/LatticeScale.lean`
-- **Verification:** Proves that for any rational target $p/q$, the distance between possible tail sums is at least $1/(q P_N)$, where $P_N$ is the prefix product.
+### Rational Lattice Spacing and Wild Oscillators
+- **File:** `src/Erdos265/WildOscillator.lean` (and `LatticeScale.lean`)
+- **Verification:** Proves the **Stall Length Bound**: If a sequence attempts a massive jump (a "wild oscillator" spike), the Diophantine gap between the step size and the rational lattice forces the sequence to stall. This stall phase is rigorously decoupled and bounded using topological series limits.
 
 ### Admissibility Stability
 - **File:** `src/Erdos265/ExistenceStability.lean`
